@@ -25,7 +25,7 @@
 
     <!--批量扫描
             可以扫描controller、service... 这里扫描controller,service，指定controller,service的包-->
-
+    <!--根据实际情况更改controller,service路径-->
     <context:component-scan base-package="com.ssm.wzry.controller,com.ssm.wzry.service.impl"></context:component-scan>
 
 
@@ -41,6 +41,7 @@
     <!--解析jsp，默认支持jstl，classpath要有jstl的包-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!--配置jsp路径的前缀，那样子我们在文件里面写jsp的时候就可以直接写名字，不用写这个路径-->
+        <!--根据实际情况更改jsp文件所在路径-->
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <!--配置jsp路径的后缀-->
         <property name="suffix" value=".jsp"/>

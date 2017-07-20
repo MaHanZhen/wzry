@@ -22,8 +22,10 @@
     </filter-mapping>
 
     <!--加载Spring容器-->
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
+        <!--根据实际情况更改路径-->
         <param-value>classpath*:config/spring/application-*.xml</param-value>
     </context-param>
 
@@ -43,6 +45,7 @@
         -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
+            <!--根据实际情况更改路径-->
             <param-value>classpath:config/spring/Springmvc.xml</param-value>
         </init-param>
     </servlet>
