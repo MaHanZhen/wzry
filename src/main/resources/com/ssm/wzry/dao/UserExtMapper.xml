@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.wzry.dao.UserExtMapper">
+    <select id="selectCountByUserName" parameterType="com.ssm.wzry.po.UserSelectVo" resultType="Integer">
+        SELECT COUNT('id') count from tb_user
+        <where>
+            userName = #{userCustom.username}
+        </where>
+    </select>
+
+    <sql id="insert_user_by_userselectvo_key">
+        userName,userPass,
+        <if test="userCustom.email!=null">
+            email,
+        </if>
+        role
+    </sql>
+    <sql id="insert_user_by_userselectvo_value">
+        #{userCustom.username},#{userCustom.userpass},
+        <if test="userCustom.email!=null">
+            #{userCustom.email},
+        </if>
+        1
+    </sql>
+    <insert id="insertUserByUserSelectVo" parameterType="com.ssm.wzry.po.UserSelectVo">
+        INSERT INTO tb_user(
+        <include refid="insert_user_by_userselectvo_key"></include>
+        )
+        VALUE (
+        <include refid="insert_user_by_userselectvo_value"></include>
+        )
+    </insert>
+
+    <select id="queryUserByNameAndPass" parameterType="com.ssm.wzry.po.UserSelectVo"
+            resultType="com.ssm.wzry.po.UserCustom">
+        SELECT * from tb_user
+        <where>
+            userName = #{userCustom.username} AND userPass = #{userCustom.userpass}
+        </where>
+    </select>
+
+
+    <sql id="update_status_By_userid_value">
+        <if test="userCustom.lastlogintime!=null">
+            lastLoginTime=#{userCustom.lastlogintime},
+        </if>
+        <if test="userCustom.loginstatus!=null">
+            loginStatus=#{userCustom.loginstatus},
+        </if>
+
+        <if test="userCustom.talkstatus!=null">
+            talkStatus=#{userCustom.talkstatus}
+        </if>
+    </sql>
+    <update id="updateStatusByUserId" parameterType="com.ssm.wzry.po.UserSelectVo">
+        UPDATE tb_user
+        <set>
+            <include refid="update_status_By_userid_value"></include>
+        </set>
+
+        <where>
+            userId = #{userCustom.userid}
+        </where>
+    </update>
+
+</mapper>

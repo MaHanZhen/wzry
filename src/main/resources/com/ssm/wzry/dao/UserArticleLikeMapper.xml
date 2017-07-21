@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.wzry.dao.UserArticleLikeMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.wzry.po.UserArticleLike" >
+    <id column="likeId" property="likeid" jdbcType="INTEGER" />
+    <result column="articleId" property="articleid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="likeTime" property="liketime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    likeId, articleId, userId, likeTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user_article_like
+    where likeId = #{likeid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_user_article_like
+    where likeId = #{likeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.wzry.po.UserArticleLike" >
+    insert into tb_user_article_like (likeId, articleId, userId, 
+      likeTime)
+    values (#{likeid,jdbcType=INTEGER}, #{articleid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{liketime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.wzry.po.UserArticleLike" >
+    insert into tb_user_article_like
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="likeid != null" >
+        likeId,
+      </if>
+      <if test="articleid != null" >
+        articleId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="liketime != null" >
+        likeTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="likeid != null" >
+        #{likeid,jdbcType=INTEGER},
+      </if>
+      <if test="articleid != null" >
+        #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="liketime != null" >
+        #{liketime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.wzry.po.UserArticleLike" >
+    update tb_user_article_like
+    <set >
+      <if test="articleid != null" >
+        articleId = #{articleid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="liketime != null" >
+        likeTime = #{liketime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where likeId = #{likeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.wzry.po.UserArticleLike" >
+    update tb_user_article_like
+    set articleId = #{articleid,jdbcType=INTEGER},
+      userId = #{userid,jdbcType=INTEGER},
+      likeTime = #{liketime,jdbcType=TIMESTAMP}
+    where likeId = #{likeid,jdbcType=INTEGER}
+  </update>
+</mapper>

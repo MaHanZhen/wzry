@@ -4,7 +4,6 @@ package cn.test;
 import com.ssm.wzry.dao.ZoneExtMapper;
 import com.ssm.wzry.po.ZoneCustom;
 import org.apache.log4j.Logger;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,13 +19,13 @@ import java.util.List;
 //加入mvc和spring的配置文件
 @ContextConfiguration(locations = {"classpath:config/spring/application-*.xml", "classpath:config/spring/Springmvc.xml"})
 
-public class TestDao {
-    static Logger logger = Logger.getLogger(TestDao.class);
+public class ZoneTest {
+    static Logger logger = Logger.getLogger(ZoneTest.class);
 
     @Autowired
     private ZoneExtMapper zoneExtMapper;
 
-    @Test
+//    @Test
     public void test() throws Exception{
 
        List<ZoneCustom> zoneCustoms= zoneExtMapper.selectAllZone();

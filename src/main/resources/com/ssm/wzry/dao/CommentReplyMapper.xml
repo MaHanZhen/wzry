@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.wzry.dao.CommentReplyMapper" >
+  <resultMap id="BaseResultMap" type="com.ssm.wzry.po.CommentReply" >
+    <id column="replyId" property="replyid" jdbcType="INTEGER" />
+    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="commentId" property="commentid" jdbcType="INTEGER" />
+    <result column="replyContent" property="replycontent" jdbcType="VARCHAR" />
+    <result column="replyTime" property="replytime" jdbcType="TIMESTAMP" />
+    <result column="replyerName" property="replyername" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    replyId, userId, commentId, replyContent, replyTime, replyerName
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comment_reply
+    where replyId = #{replyid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_comment_reply
+    where replyId = #{replyid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.ssm.wzry.po.CommentReply" >
+    insert into tb_comment_reply (replyId, userId, commentId, 
+      replyContent, replyTime, replyerName
+      )
+    values (#{replyid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{commentid,jdbcType=INTEGER}, 
+      #{replycontent,jdbcType=VARCHAR}, #{replytime,jdbcType=TIMESTAMP}, #{replyername,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ssm.wzry.po.CommentReply" >
+    insert into tb_comment_reply
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="replyid != null" >
+        replyId,
+      </if>
+      <if test="userid != null" >
+        userId,
+      </if>
+      <if test="commentid != null" >
+        commentId,
+      </if>
+      <if test="replycontent != null" >
+        replyContent,
+      </if>
+      <if test="replytime != null" >
+        replyTime,
+      </if>
+      <if test="replyername != null" >
+        replyerName,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="replyid != null" >
+        #{replyid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="commentid != null" >
+        #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="replycontent != null" >
+        #{replycontent,jdbcType=VARCHAR},
+      </if>
+      <if test="replytime != null" >
+        #{replytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyername != null" >
+        #{replyername,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.wzry.po.CommentReply" >
+    update tb_comment_reply
+    <set >
+      <if test="userid != null" >
+        userId = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="commentid != null" >
+        commentId = #{commentid,jdbcType=INTEGER},
+      </if>
+      <if test="replycontent != null" >
+        replyContent = #{replycontent,jdbcType=VARCHAR},
+      </if>
+      <if test="replytime != null" >
+        replyTime = #{replytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyername != null" >
+        replyerName = #{replyername,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where replyId = #{replyid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.wzry.po.CommentReply" >
+    update tb_comment_reply
+    set userId = #{userid,jdbcType=INTEGER},
+      commentId = #{commentid,jdbcType=INTEGER},
+      replyContent = #{replycontent,jdbcType=VARCHAR},
+      replyTime = #{replytime,jdbcType=TIMESTAMP},
+      replyerName = #{replyername,jdbcType=VARCHAR}
+    where replyId = #{replyid,jdbcType=INTEGER}
+  </update>
+</mapper>
