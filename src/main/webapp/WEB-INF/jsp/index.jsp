@@ -131,7 +131,7 @@
 			<ul class="hm-bbs-nav border-lrb clearfix">
 				<c:forEach items="${zones }" var="zone">
 					<li <c:if test="${zone.zoneid == zoneId}"> class="current" </c:if> >
-						<a href="${basePath }/index.html?zoneCustom.zoneid=${zone.zoneid}"><em></em>${zone.zonename }</a>
+						<a href="${basePath }/index.html?articleCustom.zoneid=${zone.zoneid}"><em></em>${zone.zonename }</a>
 					</li>
 				</c:forEach>
 				
@@ -141,19 +141,19 @@
 				<!-- 左侧列表 -->
 				<div class="list-view l">
 					<ul>
-					<c:forEach items="${pagination.items }" var="article">
-						<li class="clearfix <c:if test='${article.isTop == 1 }'>ding </c:if>">
+					<c:forEach items="${articleCustoms}" var="article">
+						<li class="clearfix <c:if test='${article.istop == 1 }'>ding </c:if>">
 							<div class="hm-index-title">
-								<i class="set-to-top">顶</i> <a href="detail.html?articleId=${article.articleId }">${article.title }</a>
+								<i class="set-to-top">顶</i> <a href="detail.html?articleId=${article.articleid }">${article.title }</a>
 							</div>
 							<div class="hm-index-con">${article.content }</div>
 							<div class="hm-index-info l">
-								<span class="article-username">${article.posterName }</span><span
-									class="post-time"><fmt:formatDate value="${article.postTime }" pattern="yyyy-MM-dd HH:mm:ss"/> </span>
+								<span class="article-username">${article.postername }</span><span
+									class="post-time"><fmt:formatDate value="${article.posttime }" pattern="yyyy-MM-dd HH:mm:ss"/> </span>
 							</div>
 							<div class="hm-index-fun r">
-								<span class="icon-like"><i></i>${article.likeCount }</span>
-								<span class="icon-talk"><i></i>${article.commentCount }</span>
+								<span class="icon-like"><i></i>${article.likecount }</span>
+								<span class="icon-talk"><i></i>${article.commentcount }</span>
 							</div>
 						</li>
 					</c:forEach>
@@ -162,39 +162,39 @@
 				<!-- 分页 -->
 				<div class="gb-page-turn gb-pb-b">
 					<div class="_pageNav gb-page-r">
-						<c:if test="${pagination.pageNo>1 }">
-							<a href="${basePath }/index.html?zoneId=${zoneId}">首页</a>
-							<a href="${basePath }/index.html?zoneId=${zoneId}&pageNo=${pagination.pageNo-1}">上一页</a>
+						<c:if test="${pageCount>1 }">
+							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}">首页</a>
+							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pageNo-1}">上一页</a>
 						</c:if>
 						
 						<!-- --------------------------页号显示开始-------------------------- -->
 						<c:set var="showTotal" value="5"/><!-- 预计要显示的页数 -->
 						<!-- 1、如果实际总页数比预计要显示的页数少的话，那么应该将所有页数显示 -->
-						<c:if test="${pagination.totalPageCount < showTotal }">
-							<c:forEach begin="1" end="${pagination.totalPageCount}" step="1" var="pgIndex">
-								<c:if test="${pagination.pageNo==pgIndex }">
+						<c:if test="${pageCount < showTotal }">
+							<c:forEach begin="1" end="${pageCount}" step="1" var="pgIndex">
+								<c:if test="${pageNo==pgIndex }">
 									<span class="current">${pgIndex }</span>
 								</c:if>
-								<c:if test="${pagination.pageNo!=pgIndex }">
-									<a href="${basePath }/index.html?zoneId=${zoneId}&pageNo=${pgIndex}">${pgIndex }</a>
+								<c:if test="${pageNo!=pgIndex }">
+									<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pgIndex}">${pgIndex }</a>
 								</c:if>
 							</c:forEach>
 						</c:if>
 						
 						<!-- 2、如果实际总页数比预计要显示的页数大于等于的话，那么... -->
-						<c:if test="${pagination.totalPageCount >= showTotal }">
+						<c:if test="${pageCount >= showTotal }">
 							<!-- 左右距离当前页号的间隔页数 -->
 							<c:set var="interval" value="${showTotal%2==1?(showTotal/2 - 0.5):(showTotal/2) }"/>
 							<!-- 起始页号 -->
-							<c:set var="startPageNo" value="${pagination.pageNo-interval }"/>
+							<c:set var="startPageNo" value="${pageNo-interval }"/>
 							<!-- 结束页号 -->
-							<c:set var="endPageNo" value="${pagination.pageNo+interval }"/>
+							<c:set var="endPageNo" value="${pageNo+interval }"/>
 							
 							<!-- 2.1、如果起始页号大于0 -->
 							<c:if test="${startPageNo > 0 }">
-								<c:if test="${pagination.totalPageCount < endPageNo }">
-									<c:set var="startPageNo" value="${startPageNo -(endPageNo - pagination.totalPageCount) }"/>
-									<c:set var="endPageNo" value="${pagination.totalPageCount }"/>
+								<c:if test="${pageCount < endPageNo }">
+									<c:set var="startPageNo" value="${startPageNo -(endPageNo - pageCount) }"/>
+									<c:set var="endPageNo" value="${pageCount }"/>
 								</c:if>
 							</c:if>
 							
@@ -205,22 +205,25 @@
 							</c:if>
 							
 							<c:forEach begin="${startPageNo}" end="${endPageNo}" step="1" var="pgIndex">
-								<c:if test="${pagination.pageNo==pgIndex }">
+								<c:if test="${pageNo==pgIndex }">
 									<span class="current">${pgIndex }</span>
 								</c:if>
-								<c:if test="${pagination.pageNo!=pgIndex }">
-									<a href="${basePath }/index.html?zoneId=${zoneId}&pageNo=${pgIndex}">${pgIndex }</a>
+								<c:if test="${pageNo!=pgIndex }">
+									<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pgIndex}">${pgIndex }</a>
 								</c:if>
 							</c:forEach>
 						</c:if>
 						
 						<!-- --------------------------页号显示结束-------------------------- -->
 						
-						<c:if test="${pagination.pageNo < pagination.totalPageCount }">
-							<a href="${basePath }/index.html?zoneId=${zoneId}&pageNo=${pagination.pageNo+1}">下一页</a>
-							<a href="${basePath }/index.html?zoneId=${zoneId}&pageNo=${pagination.totalPageCount}">尾页</a>
+						<c:if test="${pageNo < pageCount }">
+							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pageNo+1}">下一页</a>
+							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pageCount}">尾页</a>
 						</c:if>
-						<p><span>当前第${pagination.pageNo }页，共${pagination.totalPageCount }页</span></p>
+						<p><span>当前第
+							<c:if test="${pageNo==0 }">1</c:if>
+							<c:if test="${pageNo!=0 }">${pageNo }</c:if>
+							页，共${pageCount }页</span></p>
 					</div>
 				</div>
 					
@@ -262,7 +265,7 @@
 	</div>
 	
 	<!-- 发帖弹出框 -->
-	<form id="articleForm" action="${basePath }/postArticle" method="post" onsubmit="return check();">
+	<form id="articleForm" action="${basePath }/postArticle.html" method="post" onsubmit="return check();">
 		<div class="pop-box ft-box">
 			<div class="mask"></div>
 			<div class="win">
@@ -272,15 +275,15 @@
 				</div>
 				<div class="win_bd">
 					<div class="win_bd_t">
-						<input type="text" id="title" name="title" placeholder="帖子标题" />
+						<input type="text" id="title" name="articleCustom.title" placeholder="帖子标题" />
 					</div>
 					<div class="win_bd_b">
-						<textarea id="content" name="content" placeholder="正文"></textarea>
+						<textarea id="content" name="articleCustom.content" placeholder="正文"></textarea>
 					</div>
 				</div>
 				<div class="win_ft">
 					<div class="win_ft_in">
-						<input type="hidden" name="zoneId" value="${zoneId }"/>
+						<input type="hidden" name="articleCustom.zoneid" value="${zoneId }"/>
 						<input type="submit" class="btn" value="发表"/>
 					</div>
 				</div>

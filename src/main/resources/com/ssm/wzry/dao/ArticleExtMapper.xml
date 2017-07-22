@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ssm.wzry.dao.ArticleExtMapper" >
+
+    <resultMap id="BaseResultMap" type="com.ssm.wzry.po.ArticleCustom" >
+        <id column="articleId" property="articleid" jdbcType="INTEGER" />
+        <result column="userId" property="userid" jdbcType="INTEGER" />
+        <result column="zoneId" property="zoneid" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="postTime" property="posttime" jdbcType="TIMESTAMP" />
+        <result column="posterName" property="postername" jdbcType="VARCHAR" />
+        <result column="isTop" property="istop" jdbcType="CHAR" />
+        <result column="commentCount" property="commentcount" jdbcType="INTEGER" />
+        <result column="likeCount" property="likecount" jdbcType="INTEGER" />
+        <result column="readCount" property="readcount" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="ArticleExtUserCustom" extends="BaseResultMap" type="com.ssm.wzry.po.ArticleCustom">
+        <id column="userId" property="userCustom.userid" jdbcType="INTEGER" />
+        <result column="picUrl" property="userCustom.picurl" jdbcType="INTEGER" />
+    </resultMap>
+
+    <insert id="insertArticle" parameterType="com.ssm.wzry.po.ArticleSelectVo">
+        INSERT INTO `tb_article` (`userId`, `zoneId`, `title`, `content`, `postTime`, `posterName`)
+        VALUES (#{userCustom.userid}, #{articleCustom.zoneid}, #{articleCustom.title}, #{articleCustom.content}, #{articleCustom.posttime}, #{userCustom.username})
+    </insert>
+
+    <select id="selectArticleByZoneId" parameterType="com.ssm.wzry.po.ArticleSelectVo" resultMap="ArticleExtUserCustom">
+        SELECT  a.*,u.picUrl FROM tb_article a,tb_user u WHERE a.userId = u.userId AND zoneId = #{articleCustom.zoneid} LIMIT #{begin},#{PAGE_LENGTH} ORDER BY a.postTime DESC
+    </select>
+
+    <select id="selectArticleCountByZoneId" parameterType="Integer" resultType="Integer">
+        SELECT count(*) FROM tb_article WHERE zoneId = #{zoneId}
+    </select>
+
+</mapper>
