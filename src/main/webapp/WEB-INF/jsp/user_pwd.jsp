@@ -53,13 +53,13 @@
                 <div class="user-info-l l">
                     <div class="user-info-l-t">
                     	<div class="user-info-l-t">
-	                    <c:if test="${loginUser.picUrl == null || loginUser.picUrl == '' }">
+	                    <c:if test="${userCustom.picurl == null || userCustom.picurl == '' }">
 	                    	<img src="images/default.png" />
 	                    </c:if>
-	                    <c:if test="${loginUser.picUrl != null && loginUser.picUrl != '' }">
-	                    	<img src="${basePath }/${loginUser.picUrl}" />
+	                    <c:if test="${userCustom.picurl != null && userCustom.picurl != '' }">
+	                    	<img src="${basePath }/${userCustom.picurl}" />
 	                    </c:if>
-	                        <div class="username">${loginUser.userName }</div>
+	                        <div class="username">${userCustom.username }</div>
 	                    </div>
 	                    <ul class="user-info-l-b">
 	                        <li class="cur"><i class="info-icon"></i>我的资料</li>
@@ -76,7 +76,7 @@
                         <li><a href="userInfo.html">个人信息</a></li>
                         <li class="cur"><a href="userPwd.html">修改密码</a></li>
                     </ul>
-                    <form action="${basePath }/user?method=pwd" method="post" onsubmit="return checkPass()" >
+                    <form action="${basePath }/changePass.html?method=pwd" method="post" onsubmit="return checkPass()" >
                     <ul class="bd">
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>旧密码：</div>
@@ -84,16 +84,16 @@
                         </li>
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>新密码：</div>
-                            <div class="info-r"><input type="password" id="newPass1" name="newPass1" class="txt" /></div>
+                            <div class="info-r"><input type="password" id="newPass1" name="newPass" class="txt" /></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>重复密码：</div>
-                            <div class="info-r"><input type="password" id="newPass2" name="newPass2" class="txt" /></div>
+                            <div class="info-r"><input type="password" id="newPass2" name="newPassAgain" class="txt" /></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l"></div>
                             <div class="info-r">
-                                <input type="hidden" name="userId" value="${loginUser.userId }"/>
+                                <input type="hidden" name="userCustom.userid" value="${userCustom.userid }"/>
                             	<input type="submit" class="btn" value="保存" />
                             	<span style="color:red;">${msg }</span>
                             </div>

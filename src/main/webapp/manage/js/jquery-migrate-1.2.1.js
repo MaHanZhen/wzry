@@ -49,7 +49,7 @@ function migrateWarn( msg) {
 function migrateWarnProp( obj, prop, value, msg ) {
 	if ( Object.defineProperty ) {
 		// On ES5 browsers (non-oldIE), warn if the code tries to get prop;
-		// allow property to be overwritten in case some other plugin wants it
+		// allow property to be overwritten interceptor case some other plugin wants it
 		try {
 			Object.defineProperty( obj, prop, {
 				configurable: true,
@@ -100,7 +100,7 @@ jQuery.attr = function( elem, name, value, pass ) {
 
 	if ( pass ) {
 		// Since pass is used internally, we only warn for new jQuery
-		// versions where there isn't a pass arg in the formal params
+		// versions where there isn't a pass arg interceptor the formal params
 		if ( oldAttr.length < 4 ) {
 			migrateWarn("jQuery.fn.attr( props, pass ) is deprecated");
 		}
@@ -113,7 +113,7 @@ jQuery.attr = function( elem, name, value, pass ) {
 	// Warn if user tries to set `type`, since it breaks on IE 6/7/8; by checking
 	// for disconnected elements we don't warn on $( "<button>", { type: "button" } ).
 	if ( name === "type" && value !== undefined && rnoType.test( elem.nodeName ) && elem.parentNode ) {
-		migrateWarn("Can't change the 'type' of an input or button in IE 6/7/8");
+		migrateWarn("Can't change the 'type' of an input or button interceptor IE 6/7/8");
 	}
 
 	// Restore boolHook for boolean property/attribute synchronization
@@ -251,7 +251,7 @@ jQuery.uaMatch = function( ua ) {
 	};
 };
 
-// Don't clobber any existing jQuery.browser in case it's different
+// Don't clobber any existing jQuery.browser interceptor case it's different
 if ( !jQuery.browser ) {
 	matched = jQuery.uaMatch( navigator.userAgent );
 	browser = {};
@@ -297,7 +297,7 @@ jQuery.sub = function() {
 };
 
 
-// Ensure that $.ajax gets the new parseJSON defined in core.js
+// Ensure that $.ajax gets the new parseJSON defined interceptor core.js
 jQuery.ajaxSetup({
 	converters: {
 		"text json": jQuery.parseJSON
@@ -353,7 +353,7 @@ if ( !jQuery.clean ) {
 			handleScript = function( elem ) {
 				// Check if we consider it executable
 				if ( !elem.type || rscriptType.test( elem.type ) ) {
-					// Detach the script and store it in the scripts array (if provided) or the fragment
+					// Detach the script and store it interceptor the scripts array (if provided) or the fragment
 					// Return truthy to indicate that it has been handled
 					return scripts ?
 						scripts.push( elem.parentNode ? elem.parentNode.removeChild( elem ) : elem ) :
@@ -401,12 +401,12 @@ var eventAdd = jQuery.event.add,
 		return events && events.replace( rhoverHack, "mouseenter$1 mouseleave$1" );
 	};
 
-// Event props removed in 1.9, put them back if needed; no practical way to warn them
+// Event props removed interceptor 1.9, put them back if needed; no practical way to warn them
 if ( jQuery.event.props && jQuery.event.props[ 0 ] !== "attrChange" ) {
 	jQuery.event.props.unshift( "attrChange", "attrName", "relatedNode", "srcElement" );
 }
 
-// Undocumented jQuery.event.handle was "deprecated" in jQuery 1.7
+// Undocumented jQuery.event.handle was "deprecated" interceptor jQuery 1.7
 if ( jQuery.event.dispatch ) {
 	migrateWarnProp( jQuery.event, "handle", jQuery.event.dispatch, "jQuery.event.handle is undocumented and deprecated" );
 }
@@ -442,7 +442,7 @@ jQuery.fn.toggle = function( fn, fn2 ) {
 	}
 	migrateWarn("jQuery.fn.toggle(handler, handler...) is deprecated");
 
-	// Save reference to arguments for access in closure
+	// Save reference to arguments for access interceptor closure
 	var args = arguments,
 		guid = fn.guid || jQuery.guid++,
 		i = 0,

@@ -1,9 +1,7 @@
 package com.ssm.wzry.controller;
 
 import com.ssm.wzry.Utils;
-import com.ssm.wzry.po.ArticleSelectVo;
-import com.ssm.wzry.po.UserCustom;
-import com.ssm.wzry.po.UserSelectVo;
+import com.ssm.wzry.po.*;
 import com.ssm.wzry.service.ArticleService;
 import com.ssm.wzry.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.Date;
+import java.util.UUID;
 
 @Controller
 public class UserController {
@@ -60,7 +63,7 @@ public class UserController {
     @RequestMapping(value = "doLogout")
     public String doLogout(HttpServletRequest request) throws Exception {
 
-        UserCustom userCustom = Utils.getLoginUserCustrom(request);
+        UserCustom userCustom = Utils.getLoginUserCustom(request);
 
         userService.updateUserStatus(userCustom);
         request.getSession().setAttribute("userCustom", null);
@@ -77,17 +80,109 @@ public class UserController {
         //        userId posterName
         //当前时间
         //        postTime
-        articleSelectVo.setUserCustom(Utils.getLoginUserCustrom(request));
+        articleSelectVo.setUserCustom(Utils.getLoginUserCustom(request));
         articleSelectVo.getArticleCustom().setPosttime(new Date());
 
+        System.out.print(articleSelectVo);
         int result = articleService.insertArticle(articleSelectVo);
         if (result == 0) {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().write("<script>alert('发帖失败');history.back();</script>");
         } else {
-            response.sendRedirect("index.html");
+            response.sendRedirect("index.html?zoneId="+articleSelectVo.getArticleCustom().getZoneid());
         }
     }
 
+    @RequestMapping(value = "likeArticle")
+    public String likeArticle(int articleId, HttpServletRequest request) throws Exception {
+        articleService.updateLikeCountByArticleId(articleId, Utils.getLoginUserCustom(request).getUserid());
 
+        return "redirect:detail.html?articleId=" + articleId;
+    }
+
+
+    @RequestMapping(value = "comment")
+    public void comment(Comment comment, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        UserCustom userCustom = Utils.getLoginUserCustom(request);
+
+        comment.setCommentusername(userCustom.getUsername());
+        comment.setUserid(userCustom.getUserid());
+        comment.setCommenttime(new Date());
+        comment.setCommentstatus(0);
+
+        articleService.updateArticleCommentCountByArticleId(comment.getArticleid());
+
+        int result = articleService.insertComment(comment);
+
+        response.setContentType("text/html;charset=utf-8");
+        if (result == 0) {
+            response.getWriter().write("<script>alert('评论失败');history.back();</script>");
+        } else {
+            response.getWriter().write("<script>alert('评论成功');</script>");
+            response.sendRedirect("detail.html?articleId=" + comment.getArticleid());
+        }
+    }
+
+    @RequestMapping(value = "commentReply")
+    public void commentReply(CommentReply commentReply, int articleid, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        UserCustom userCustom = Utils.getLoginUserCustom(request);
+
+        commentReply.setReplyername(userCustom.getUsername());
+        commentReply.setUserid(userCustom.getUserid());
+        commentReply.setReplytime(new Date());
+
+
+        response.setContentType("text/html;charset=utf-8");
+        int result = articleService.insertCommentReply(commentReply);
+        if (result == 0) {
+            response.getWriter().write("<script>alert('评论失败');history.back();</script>");
+        } else {
+            response.getWriter().write("<script>alert('评论成功');</script>");
+            response.sendRedirect("detail.html?articleId=" + articleid);
+        }
+    }
+
+    @RequestMapping("changeUser")
+    public void changeUser(UserSelectVo userSelectVo,
+                           @RequestParam("pic") CommonsMultipartFile pic,
+                           HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        if (pic != null && pic.getSize() != 0) {
+            String filename = pic.getOriginalFilename();
+            String newFileName = UUID.randomUUID().toString() + filename.substring(filename.lastIndexOf("."));
+            String sqlPath = "upload/images";
+            File file = new File(Utils.getRealyProjectPath(request, sqlPath) + newFileName);
+            pic.transferTo(file);
+            userSelectVo.getUserCustom().setPicurl(sqlPath + "/" + newFileName);
+        }
+
+        userService.updateUser(userSelectVo);
+
+
+        response.setContentType("text/html;charset=utf-8");
+
+        response.getWriter().write("<script>alert('修改成功,请重新登录');</script>");
+
+        response.sendRedirect("doLogout.html");
+    }
+
+
+    @RequestMapping(value = "changePass", params = {"oldPass", "newPassAgain", "newPass", "userCustom.userid"})
+    public void changeUser(UserSelectVo userSelectVo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        response.setContentType("text/html;charset=utf-8");
+        UserCustom userCustom= Utils.getLoginUserCustom(request);
+        if (!userSelectVo.getOldPass().equals( Utils.getLoginUserCustom(request).getUserpass())) {
+            request.setAttribute("msg", "密码错误");
+            request.getRequestDispatcher("userPwd.html").forward(request, response);
+        } else if (!userSelectVo.getNewPass().equals(userSelectVo.getNewPassAgain())) {
+            request.setAttribute("msg", "新密码与确认密码不一致");
+            request.getRequestDispatcher("userPwd.html").forward(request, response);
+        } else {
+            userSelectVo.getUserCustom().setUserpass(userSelectVo.getNewPassAgain());
+            userService.updateUser(userSelectVo);
+            response.sendRedirect("doLogout.html");
+        }
+
+
+    }
 }

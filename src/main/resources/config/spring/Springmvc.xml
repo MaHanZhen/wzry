@@ -47,4 +47,20 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+
+
+    <!-- 上传文件的设置 ，maxUploadSize=-1，表示无穷大。uploadTempDir为上传的临时目录 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+    >
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="maxUploadSize" value="-1"/>
+        <property name="uploadTempDir" value="/upload/images/cache"/>
+    </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.ssm.wzry.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

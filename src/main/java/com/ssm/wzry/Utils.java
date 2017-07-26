@@ -7,7 +7,11 @@ import javax.servlet.http.HttpSession;
 
 public class Utils {
 
-    public static UserCustom getLoginUserCustrom(HttpServletRequest request) throws Exception{
+    public static UserCustom getLoginUserCustom(HttpServletRequest request) throws Exception{
         return (UserCustom)request.getSession().getAttribute("userCustom");
+    }
+
+    public static String getRealyProjectPath(HttpServletRequest request,String sqlPath) throws Exception{
+        return request.getSession().getServletContext().getRealPath(sqlPath)+"/";
     }
 }

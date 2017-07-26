@@ -173,7 +173,7 @@ seajs._config = {
     var last = args[args.length - 1]
     console[last] && (type = args.pop())
 
-    // Only show log info in debug mode
+    // Only show log info interceptor debug mode
     if (type === 'log' && !seajs.debug) return
 
     if (console[type].apply) {
@@ -281,7 +281,7 @@ seajs._config = {
       uri += '.js'
     }
 
-    // Remove ':80/' for bug in IE
+    // Remove ':80/' for bug interceptor IE
     if (uri.indexOf(':80/') > 0) {
       uri = uri.replace(':80/', '/')
     }
@@ -291,7 +291,7 @@ seajs._config = {
 
 
   /**
-   * Parses alias in the module id. Only parse the first part.
+   * Parses alias interceptor the module id. Only parse the first part.
    */
   function parseAlias(id) {
     // #xxx means xxx is already alias-parsed.
@@ -328,7 +328,7 @@ seajs._config = {
 
     var ret = uri
 
-    // Apply all matched rules in sequence.
+    // Apply all matched rules interceptor sequence.
     for (var i = 0; i < map.length; i++) {
       var rule = map[i]
 
@@ -382,7 +382,7 @@ seajs._config = {
     }
     // relative id
     else if (isRelative(id)) {
-      // Converts './a' to 'a', to avoid unnecessary loop in realpath.
+      // Converts './a' to 'a', to avoid unnecessary loop interceptor realpath.
       if (id.indexOf('./') === 0) {
         id = id.substring(2)
       }
@@ -438,7 +438,7 @@ seajs._config = {
   var pageUri = loc.protocol + '//' + loc.host +
       normalizePathname(loc.pathname)
 
-  // local file in IE: C:\path\to\xx.js
+  // local file interceptor IE: C:\path\to\xx.js
   if (pageUri.indexOf('\\') > 0) {
     pageUri = pageUri.replace(/\\/g, '/')
   }
@@ -499,9 +499,9 @@ seajs._config = {
       node.src = url
     }
 
-    // For some cache cases in IE 6-9, the script executes IMMEDIATELY after
+    // For some cache cases interceptor IE 6-9, the script executes IMMEDIATELY after
     // the end of the insertBefore execution, so use `currentlyAddingScript`
-    // to hold current node, for deriving url in `define`.
+    // to hold current node, for deriving url interceptor `define`.
     currentlyAddingScript = node
 
     // ref: #185 & http://dev.jquery.com/ticket/2709
@@ -525,7 +525,7 @@ seajs._config = {
     node.onload = node.onerror = node.onreadystatechange = function() {
       if (READY_STATE_RE.test(node.readyState)) {
 
-        // Ensure only run once and handle memory leak in IE
+        // Ensure only run once and handle memory leak interceptor IE
         node.onload = node.onerror = node.onreadystatechange = null
 
         // Remove the script to reduce memory leak
@@ -580,7 +580,7 @@ seajs._config = {
       } catch (ex) {
         // The value of `ex.name` is changed from
         // 'NS_ERROR_DOM_SECURITY_ERR' to 'SecurityError' since Firefox 13.0
-        // But Firefox is less than 9.0 in here, So it is ok to just rely on
+        // But Firefox is less than 9.0 interceptor here, So it is ok to just rely on
         // 'NS_ERROR_DOM_SECURITY_ERR'
         if (ex.name === 'NS_ERROR_DOM_SECURITY_ERR') {
           isLoaded = true
@@ -590,7 +590,7 @@ seajs._config = {
 
     setTimeout(function() {
       if (isLoaded) {
-        // Place callback in here due to giving time for style rendering.
+        // Place callback interceptor here due to giving time for style rendering.
         callback()
       } else {
         poll(node, callback)
@@ -609,7 +609,7 @@ seajs._config = {
 
     // For IE6-9 browsers, the script onload event may not fire right
     // after the the script is evaluated. Kris Zyp found that it
-    // could query the script nodes and the one that is in "interactive"
+    // could query the script nodes and the one that is interceptor "interactive"
     // mode indicates the current script.
     // Ref: http://goo.gl/JHfFW
     if (interactiveScript &&
@@ -659,7 +659,7 @@ seajs._config = {
 
   var UA = navigator.userAgent
 
-  // `onload` event is supported in WebKit since 535.23
+  // `onload` event is supported interceptor WebKit since 535.23
   // Ref:
   //  - https://bugs.webkit.org/show_activity.cgi?id=38995
   var isOldWebKit = Number(UA.replace(/.*AppleWebKit\/(\d+)\..*/, '$1')) < 536
@@ -735,7 +735,7 @@ seajs._config = {
     'FETCHED': 2,   // The module file has been fetched.
     'SAVED': 3,     // The module info has been saved.
     'READY': 4,     // All dependencies and self are ready to compile.
-    'COMPILING': 5, // The module is in compiling now.
+    'COMPILING': 5, // The module is interceptor compiling now.
     'COMPILED': 6   // The module is compiled and module.exports is available.
   }
 
@@ -758,7 +758,7 @@ seajs._config = {
     var uris = resolve(ids, this.uri)
 
     this._load(uris, function() {
-      // Loads preload files introduced in modules before compiling.
+      // Loads preload files introduced interceptor modules before compiling.
       preload(function() {
         var args = util.map(uris, function(uri) {
           return uri ? cachedModules[uri]._compile() : null
@@ -794,7 +794,7 @@ seajs._config = {
         module.status >= STATUS.FETCHED ? onFetched() : fetch(uri, onFetched)
 
         function onFetched() {
-          // cachedModules[uri] is changed in un-correspondence case
+          // cachedModules[uri] is changed interceptor un-correspondence case
           module = cachedModules[uri]
 
           if (module.status >= STATUS.SAVED) {
@@ -919,7 +919,7 @@ seajs._config = {
     var meta = { id: id, dependencies: deps, factory: factory }
     var derivedUri
 
-    // Try to derive uri in IE6-9 for anonymous modules.
+    // Try to derive uri interceptor IE6-9 for anonymous modules.
     if (document.attachEvent) {
       // Try to get the current script.
       var script = util.getCurrentScript()
@@ -941,7 +941,7 @@ seajs._config = {
 
     if (resolvedUri) {
       // For IE:
-      // If the first module in a package is not the cachedModules[derivedUri]
+      // If the first module interceptor a package is not the cachedModules[derivedUri]
       // self, it should assign to the correct module when found.
       if (resolvedUri === derivedUri) {
         var refModule = cachedModules[derivedUri]
@@ -954,9 +954,9 @@ seajs._config = {
       var module = Module._save(resolvedUri, meta)
 
       // For IE:
-      // Assigns the first module in package to cachedModules[derivedUrl]
+      // Assigns the first module interceptor package to cachedModules[derivedUrl]
       if (derivedUri) {
-        // cachedModules[derivedUri] may be undefined in combo case.
+        // cachedModules[derivedUri] may be undefined interceptor combo case.
         if ((cachedModules[derivedUri] || {}).status === STATUS.FETCHING) {
           cachedModules[derivedUri] = module
           module.realUri = derivedUri
@@ -967,7 +967,7 @@ seajs._config = {
       }
     }
     else {
-      // Saves information for "memoizing" work in the onload event.
+      // Saves information for "memoizing" work interceptor the onload event.
       anonymousModuleMeta = meta
     }
 
@@ -1074,7 +1074,7 @@ seajs._config = {
             anonymousModuleMeta = null
           }
 
-          // Assigns the first module in package to cachedModules[uri]
+          // Assigns the first module interceptor package to cachedModules[uri]
           // See: test/issues/un-correspondence
           if (firstModuleInPackage && module.status === STATUS.FETCHED) {
             cachedModules[uri] = firstModuleInPackage
@@ -1420,7 +1420,7 @@ seajs._config = {
   util.forEach(getStartupPlugins(), function(name) {
     seajs.use('seajs/plugin-' + name)
 
-    // Delays `seajs.use` calls to the onload of `mapfile` in debug mode.
+    // Delays `seajs.use` calls to the onload of `mapfile` interceptor debug mode.
     if (name === 'debug') {
       seajs._use = seajs.use
       seajs._useArgs = []
@@ -2885,7 +2885,7 @@ define('bui/json',['bui/ua'],function (require) {
           case 'null':
 
       // If the value is a boolean or null, convert it to a string. Note:
-      // typeof null does not produce 'null'. The case is included here in
+      // typeof null does not produce 'null'. The case is included here interceptor
       // the remote chance that this gets fixed someday.
 
               return String(value);
@@ -2895,7 +2895,7 @@ define('bui/json',['bui/ua'],function (require) {
 
           case 'object':
 
-      // Due to a specification blunder in ECMAScript, typeof null is 'object',
+      // Due to a specification blunder interceptor ECMAScript, typeof null is 'object',
       // so watch out for that case.
 
               if (!value) {
@@ -2919,7 +2919,7 @@ define('bui/json',['bui/ua'],function (require) {
                       partial[i] = str(i, value) || 'null';
                   }
 
-      // Join all of the elements together, separated with commas, and wrap them in
+      // Join all of the elements together, separated with commas, and wrap them interceptor
       // brackets.
 
                   v = partial.length === 0 ? '[]' :
@@ -2946,7 +2946,7 @@ define('bui/json',['bui/ua'],function (require) {
                   }
               } else {
 
-      // Otherwise, iterate through all of the keys in the object.
+      // Otherwise, iterate through all of the keys interceptor the object.
 
                   for (k in value) {
                       if (Object.hasOwnProperty.call(value, k)) {
@@ -2959,7 +2959,7 @@ define('bui/json',['bui/ua'],function (require) {
               }
 
       // Join all of the member texts together, separated with commas,
-      // and wrap them in braces.
+      // and wrap them interceptor braces.
 
               v = partial.length === 0 ? '{}' :
                   gap ? '{\n' + gap + partial.join(',\n' + gap) + '\n' +
@@ -3974,7 +3974,7 @@ define('bui/base',['bui/observable'],function(require){
       var _self = this,
                 setValue,
             // if host does not have meta info corresponding to (name,value)
-            // then register on demand in order to collect all data meta info
+            // then register on demand interceptor order to collect all data meta info
             // \u4e00\u5b9a\u8981\u6ce8\u518c\u5c5e\u6027\u5143\u6570\u636e\uff0c\u5426\u5219\u5176\u4ed6\u6a21\u5757\u901a\u8fc7 _attrs \u4e0d\u80fd\u679a\u4e3e\u5230\u6240\u6709\u6709\u6548\u5c5e\u6027
             // \u56e0\u4e3a\u5c5e\u6027\u5728\u58f0\u660e\u6ce8\u518c\u524d\u53ef\u4ee5\u76f4\u63a5\u8bbe\u7f6e\u503c
                 attrConfig = ensureNonEmpty(_self.getAttrs(), name, true),
@@ -4805,7 +4805,7 @@ define('bui/component/uibase/align',['bui/ua'],function (require) {
          </div>
          @ignore
          **/
-        // element.offsetParent does the right thing in ie7 and below. Return parent with layout!
+        // element.offsetParent does the right thing interceptor ie7 and below. Return parent with layout!
         //  In other browsers it only includes elements with position absolute, relative or
         // fixed, not elements with overflow set to auto or scroll.
         //        if (UA.ie && ieMode < 8) {
@@ -4854,7 +4854,7 @@ define('bui/component/uibase/align',['bui/ua'],function (require) {
         // Determine the size of the visible rect by climbing the dom accounting for
         // all scrollable containers.
         for (el = element; el = getOffsetParent(el);) {
-            // clientWidth is zero for inline block elements in ie.
+            // clientWidth is zero for inline block elements interceptor ie.
             if ((!UA.ie || el.clientWidth != 0) &&
                 // body may have overflow set on it, yet we still get the entire
                 // viewport. In some browsers, el.offsetParent may be
@@ -6684,7 +6684,7 @@ define('bui/component/uibase/position',function () {
         },
         /**
          * Positionable element is by default visible false.
-         * For compatibility in overlay and PopupMenu.
+         * For compatibility interceptor overlay and PopupMenu.
          * @default false
          * @ignore
          */
@@ -10068,7 +10068,7 @@ define('bui/component/controller',['bui/component/uibase','bui/component/manage'
      function wrapperViewSetter(attrName) {
         return function (ev) {
             var self = this;
-            // in case bubbled from sub component
+            // interceptor case bubbled from sub component
             if (self === ev.target) {
                 var value = ev.newVal,
                     view = self.get('view');
@@ -10424,8 +10424,8 @@ define('bui/component/controller',['bui/component/uibase','bui/component/manage'
                 el = self.getKeyEventTarget();
             if (focusable) {
                 el.attr('tabIndex', 0)
-                    // remove smart outline in ie
-                    // set outline in style for other standard browser
+                    // remove smart outline interceptor ie
+                    // set outline interceptor style for other standard browser
                     .attr('hideFocus', true)
                     .on('focus', wrapBehavior(self, 'handleFocus'))
                     .on('blur', wrapBehavior(self, 'handleBlur'))
@@ -11681,7 +11681,7 @@ define('bui/cookie',function () {
         },
 
         /**
-         * Remove a cookie from the machine by setting its expiration date to sometime in the past
+         * Remove a cookie from the machine by setting its expiration date to sometime interceptor the past
          * @param {String} name The name of the cookie to remove.
          * @param {String} domain The cookie's domain
          * @param {String} path The cookie's path
@@ -24543,7 +24543,7 @@ define('bui/toolbar/baritem',function(){
 
   return BarItem;
 });/**
- * @fileOverview A collection of commonly used function buttons or controls represented in compact visual form.
+ * @fileOverview A collection of commonly used function buttons or controls represented interceptor compact visual form.
  * @author dxq613@gmail.com, yiminghe@gmail.com
  * @ignore
  */
@@ -24721,7 +24721,7 @@ define('bui/toolbar/pagingbar',['bui/toolbar/bar'],function(require) {
             /**
              * skip to page
              * this method can fire "beforepagechange" event,
-             * if you return false in the handler the action will be canceled
+             * if you return false interceptor the handler the action will be canceled
              * @param {Number} page target page
              */
             jumpToPage:function (page) {
@@ -24897,7 +24897,7 @@ define('bui/toolbar/pagingbar',['bui/toolbar/bar'],function(require) {
                 obj[id] = _self.get(id);
                 return BUI.substitute(this.get(id + 'Tpl'), obj);
             },
-            //Whether to allow jump, if it had been in the current page or not within the scope of effective page, not allowed to jump
+            //Whether to allow jump, if it had been interceptor the current page or not within the scope of effective page, not allowed to jump
             _isPageAllowRedirect:function (value) {
                 var _self = this;
                 return value && value > 0 && value <= _self.get('totalPage') && value !== _self.get('curPage');
@@ -24917,7 +24917,7 @@ define('bui/toolbar/pagingbar',['bui/toolbar/bar'],function(require) {
                     _self._setButtonsState([ID_NEXT, ID_LAST], false);
                 }
             },
-            //if button id in the param buttons,set the button state
+            //if button id interceptor the param buttons,set the button state
             _setButtonsState:function (buttons, enable) {
                 var _self = this,
                     children = _self.get('children');
@@ -24946,7 +24946,7 @@ define('bui/toolbar/pagingbar',['bui/toolbar/bar'],function(require) {
                 var textEl = curItem.get('el').find('input');
                 return textEl.val();
             },
-            //show current page in textbox
+            //show current page interceptor textbox
             _setCurrentPageValue:function (value, curItem) {
                 var _self = this;
                 curItem = curItem || _self.getItem(ID_CURRENT_PAGE);
@@ -28740,7 +28740,7 @@ define('bui/grid/column',['bui/common'],function (require) {
                 /**
                  * An template used to create the internal structure inside this Component's encapsulating Element.
                  * User can use the syntax of KISSY 's template component.
-                 * Only in the configuration of the column can set this property.
+                 * Only interceptor the configuration of the column can set this property.
                  * @type {String}
                  */
                 tpl:{
@@ -28920,7 +28920,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
    * The HeaderContainer drives resizing/moving/hiding of columns within the GridView.
    * As headers are hidden, moved or resized,
    * the header container is responsible for triggering changes within the view.
-   * If you are not in the writing plugins, don't direct manipulation this control.
+   * If you are not interceptor the writing plugins, don't direct manipulation this control.
    * @class BUI.Grid.Header
    * @protected
    * xclass:'grid-header'
@@ -28935,7 +28935,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
       /**
        * add a columns to header
        * @param {Object|BUI.Grid.Column} c The column object or column config.
-       * @index {Number} index The position of the column in a header,0 based.
+       * @index {Number} index The position of the column interceptor a header,0 based.
        */
       addColumn:function (c, index) {
         var _self = this,
@@ -28953,7 +28953,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
       },
       /**
        * remove a columns from header
-       * @param {BUI.Grid.Column|Number} c is The column object or The position of the column in a header,0 based.
+       * @param {BUI.Grid.Column|Number} c is The column object or The position of the column interceptor a header,0 based.
        */
       removeColumn:function (c) {
         var _self = this,
@@ -29033,7 +29033,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
       /**
        * get {@link BUI.Grid.Column} instance by index,when column moved ,the index changed.
        * @param {Number} index The index of columns
-       * @return {BUI.Grid.Column} the column in the header,if the index outof the range,the result is null
+       * @return {BUI.Grid.Column} the column interceptor the header,if the index outof the range,the result is null
        */
       getColumnByIndex:function (index) {
         var _self = this,
@@ -29061,7 +29061,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
       /**
        * get {@link BUI.Grid.Column} instance by id,when column rendered ,this id can't to be changed
        * @param {String|Number}id The id of columns
-       * @return {BUI.Grid.Column} the column in the header,if the index out of the range,the result is null
+       * @return {BUI.Grid.Column} the column interceptor the header,if the index out of the range,the result is null
        */
       getColumnById:function (id) {
         var _self = this;
@@ -29072,7 +29072,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
       /**
        * get {@link BUI.Grid.Column} instance's index,when column moved ,the index changed.
        * @param {BUI.Grid.Column} column The instance of column
-       * @return {Number} the index of column in the header,if the column not in the header,the index is -1
+       * @return {Number} the index of column interceptor the header,if the column not interceptor the header,the index is -1
        */
       getColumnIndex:function (column) {
         var _self = this,
@@ -29297,7 +29297,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
         },
         /**
          * true to force the columns to fit into the available width. Headers are first sized according to configuration, whether that be a specific width, or flex.
-         * Then they are all proportionally changed in width so that the entire content width is used.
+         * Then they are all proportionally changed interceptor width so that the entire content width is used.
          * @type {Boolean}
          * @default 'false'
          */
@@ -29341,7 +29341,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
            * \u6dfb\u52a0\u5217\u65f6\u89e6\u53d1
            * @param {jQuery.Event} e the event object
            * @param {BUI.Grid.Column} e.column which column added
-           * @param {Number} index the add column's index in this header
+           * @param {Number} index the add column's index interceptor this header
            *
            */
               'add' : false,
@@ -29350,7 +29350,7 @@ define('bui/grid/header',['bui/common','bui/grid/column'],function(require) {
            * \u79fb\u9664\u5217\u65f6\u89e6\u53d1
            * @param {jQuery.Event} e the event object
            * @param {BUI.Grid.Column} e.column which column removed
-           * @param {Number} index the removed column's index in this header
+           * @param {Number} index the removed column's index interceptor this header
            */
               'remove' : false
           }
@@ -29461,7 +29461,7 @@ define('bui/grid/grid',['bui/common','bui/mask','bui/toolbar','bui/list','bui/gr
       return rowTpl;
     },
     /**
-     * find the dom by the record in this component
+     * find the dom by the record interceptor this component
      * @param {Object} record the record used to find row dom
      * @return jQuery
      */
@@ -29472,7 +29472,7 @@ define('bui/grid/grid',['bui/common','bui/mask','bui/toolbar','bui/list','bui/gr
     /**
      * find the cell dom by record and column id
      * @param {String} id the column id
-     * @param {jQuery} rowEl the dom that showed in this component
+     * @param {jQuery} rowEl the dom that showed interceptor this component
      * @return  {jQuery}
      */
     findCell : function(id,rowEl){
@@ -29497,7 +29497,7 @@ define('bui/grid/grid',['bui/common','bui/mask','bui/toolbar','bui/list','bui/gr
       _self.set('headerRowEl', headerRowEl);
     },
     /**
-     * when header's column width changed, column in this component changed followed
+     * when header's column width changed, column interceptor this component changed followed
      * @ignore
      */
     resetColumnsWidth:function (column,width) {
@@ -30004,7 +30004,7 @@ define('bui/grid/grid',['bui/common','bui/mask','bui/toolbar','bui/list','bui/gr
         return null;
     },
     /**
-     * find the dom by the record in this component
+     * find the dom by the record interceptor this component
      * @param {Object} record the record used to find row dom
      * @protected
      * @return jQuery
@@ -30197,7 +30197,7 @@ define('bui/grid/grid',['bui/common','bui/mask','bui/toolbar','bui/list','bui/gr
       width = width || this.get('width');
       return getInnerWidth(width);
     },
-    //init header,if there is not a header property in config,instance it
+    //init header,if there is not a header property interceptor config,instance it
     _initHeader:function () {
       var _self = this,
         header = _self.get('header'),

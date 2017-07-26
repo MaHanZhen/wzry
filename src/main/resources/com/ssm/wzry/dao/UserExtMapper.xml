@@ -49,7 +49,7 @@
         </if>
 
         <if test="userCustom.talkstatus!=null">
-            talkStatus=#{userCustom.talkstatus}
+            talkStatus=#{userCustom.talkstatus},
         </if>
     </sql>
     <update id="updateStatusByUserId" parameterType="com.ssm.wzry.po.UserSelectVo">
@@ -63,4 +63,35 @@
         </where>
     </update>
 
+
+    <sql id="update_user_By_userid_value">
+
+        <if test="userCustom.email!=null">
+            email=#{userCustom.email},
+        </if>
+
+        <if test="userCustom.picurl!=null">
+            picUrl=#{userCustom.picurl},
+        </if>
+
+        <if test="userCustom.userpass!=null">
+            userPass=#{userCustom.userpass},
+        </if>
+    </sql>
+
+    <update id="updateUser" parameterType="com.ssm.wzry.po.UserSelectVo">
+        UPDATE tb_user
+        <set>
+            <include refid="update_user_By_userid_value"></include>
+        </set>
+
+
+        <where>
+            userId = #{userCustom.userid}
+        </where>
+    </update>
+
+    <select id="queryUserByLoginStatus" resultType="com.ssm.wzry.po.UserCustom">
+        SELECT * from tb_user WHERE loginStatus =1
+    </select>
 </mapper>

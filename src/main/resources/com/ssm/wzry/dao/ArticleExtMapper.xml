@@ -1,36 +1,116 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.ssm.wzry.dao.ArticleExtMapper" >
+<mapper namespace="com.ssm.wzry.dao.ArticleExtMapper">
 
-    <resultMap id="BaseResultMap" type="com.ssm.wzry.po.ArticleCustom" >
-        <id column="articleId" property="articleid" jdbcType="INTEGER" />
-        <result column="userId" property="userid" jdbcType="INTEGER" />
-        <result column="zoneId" property="zoneid" jdbcType="INTEGER" />
-        <result column="title" property="title" jdbcType="VARCHAR" />
-        <result column="postTime" property="posttime" jdbcType="TIMESTAMP" />
-        <result column="posterName" property="postername" jdbcType="VARCHAR" />
-        <result column="isTop" property="istop" jdbcType="CHAR" />
-        <result column="commentCount" property="commentcount" jdbcType="INTEGER" />
-        <result column="likeCount" property="likecount" jdbcType="INTEGER" />
-        <result column="readCount" property="readcount" jdbcType="INTEGER" />
-    </resultMap>
 
-    <resultMap id="ArticleExtUserCustom" extends="BaseResultMap" type="com.ssm.wzry.po.ArticleCustom">
-        <id column="userId" property="userCustom.userid" jdbcType="INTEGER" />
-        <result column="picUrl" property="userCustom.picurl" jdbcType="INTEGER" />
-    </resultMap>
+    <!--<resultMap id="ArticleExtUserCustom" extends="BaseResultMap" type="com.ssm.wzry.po.ArticleCustom">-->
+    <!--<id column="userId" property="userCustom.userid" jdbcType="INTEGER" />-->
+    <!--<result column="picUrl" property="userCustom.picurl" jdbcType="INTEGER" />-->
+    <!--</resultMap>-->
 
     <insert id="insertArticle" parameterType="com.ssm.wzry.po.ArticleSelectVo">
         INSERT INTO `tb_article` (`userId`, `zoneId`, `title`, `content`, `postTime`, `posterName`)
         VALUES (#{userCustom.userid}, #{articleCustom.zoneid}, #{articleCustom.title}, #{articleCustom.content}, #{articleCustom.posttime}, #{userCustom.username})
     </insert>
 
-    <select id="selectArticleByZoneId" parameterType="com.ssm.wzry.po.ArticleSelectVo" resultMap="ArticleExtUserCustom">
-        SELECT  a.*,u.picUrl FROM tb_article a,tb_user u WHERE a.userId = u.userId AND zoneId = #{articleCustom.zoneid} LIMIT #{begin},#{PAGE_LENGTH} ORDER BY a.postTime DESC
+    <select id="selectArticleByZoneId" parameterType="com.ssm.wzry.po.IndexSelectVo"
+            resultType="com.ssm.wzry.po.ArticleCustom">
+        <!--
+        SELECT  a.*,u.picUrl FROM tb_article a,tb_user u WHERE a.userId = u.userId AND zoneId = #{articleCustom.zoneid} ORDER BY a.postTime DESC LIMIT #{begin},#{PAGE_LENGTH}
+        -->
+        SELECT * FROM tb_article a
+        <where>
+            zoneId = #{zoneId}
+            <if test="title!=null">
+                AND title LIKE '%${title}%'
+            </if>
+        </where>
+
+        ORDER BY `postTime` DESC LIMIT #{begin},#{A_PAGE_LENGTH}
     </select>
 
-    <select id="selectArticleCountByZoneId" parameterType="Integer" resultType="Integer">
-        SELECT count(*) FROM tb_article WHERE zoneId = #{zoneId}
+    <select id="selectArticleCountByZoneIdAndTitle" parameterType="com.ssm.wzry.po.IndexSelectVo" resultType="Integer">
+        SELECT count(*) FROM tb_article
+        <where>
+            zoneId = #{zoneId}
+            <if test="title!=null">
+                AND title LIKE '%${title}%'
+            </if>
+        </where>
     </select>
 
+
+    <select id="getArticleCount" parameterType="string" resultType="Integer">
+        SELECT count(*) from tb_article
+        <if test="_parameter!=null">
+            where
+            postTime like '${_parameter}%'
+        </if>
+    </select>
+
+
+    <update id="updateArticleReadCountByArticleId" parameterType="java.lang.Integer">
+        UPDATE tb_article SET readCount = (readCount+1) WHERE articleId = ${_parameter};
+    </update>
+
+    <select id="queryArticleDetailByArticleId" parameterType="java.lang.Integer"
+            resultType="com.ssm.wzry.po.ArticleCustom">
+        select a.*,u.picUrl from tb_article a,tb_user u WHERE a.userId = u.userId AND a.articleId = ${_parameter}
+        <!--SELECT * FROM tb_article WHERE articleId=${_parameter}-->
+    </select>
+
+    <update id="updateLikeCountByArticleId" parameterType="java.lang.Integer">
+        UPDATE tb_article SET likeCount = (likeCount+1) WHERE articleId = ${_parameter}
+    </update>
+    <select id="queryCommentByArticleId" parameterType="java.lang.Integer" resultType="com.ssm.wzry.po.CommentCustom">
+        SELECT
+	c.articleId,
+	c.commentContent,
+	c.commentId,
+	c.commentStatus,
+	c.commentTime,
+	c.commentUserName,
+	c.userId,
+	u.picUrl
+FROM
+	tb_comment c,
+	tb_user u
+WHERE
+	c.userId = u.userId
+AND articleId = ${_parameter}
+ORDER BY
+	c.commentTime DESC
+    </select>
+
+
+    <select id="queryCommentReplyByArticleId" parameterType="java.lang.Integer"
+            resultType="com.ssm.wzry.po.CommentReplyCustom">
+    SELECT
+	u.picUrl,
+	r.commentId,
+	r.replyContent,
+	r.replyerName,
+	r.replyId,
+	r.replyTime,
+	r.userId
+FROM
+	tb_comment_reply r,
+	tb_user u
+WHERE
+	r.userId = u.userId
+AND commentId IN (
+	SELECT
+		commentId
+	FROM
+		tb_comment
+	WHERE
+		articleId = ${_parameter}
+)
+ORDER BY
+	r.replyTime DESC
+    </select>
+
+    <update id="updateArticleCommentCountByArticleId" parameterType="java.lang.Integer">
+         UPDATE tb_article SET commentCount = (commentCount+1) WHERE articleId = ${_parameter}
+    </update>
 </mapper>

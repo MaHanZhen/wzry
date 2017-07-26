@@ -5,7 +5,7 @@ import com.ssm.wzry.po.UserSelectVo;
 
 import java.util.List;
 
-public interface UserExtMapper  extends UserMapper{
+public interface UserExtMapper extends UserMapper {
 
     public Integer selectCountByUserName(UserSelectVo user) throws Exception;
 
@@ -15,4 +15,8 @@ public interface UserExtMapper  extends UserMapper{
 
     public Integer updateStatusByUserId(UserSelectVo user) throws Exception;
 
+    public Integer updateUser(UserSelectVo user) throws Exception;
+
+
+    public List<UserCustom> queryUserByLoginStatus() throws Exception;
 }

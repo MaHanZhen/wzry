@@ -1,7 +1,6 @@
 package com.ssm.wzry.po;
 
-public class ArticleCustom extends Article {
-
+public class CommentCustom extends Comment{
     private String picUrl;
 
     public String getPicUrl() {

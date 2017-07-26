@@ -40,13 +40,13 @@
             	<div class="user-info-t" style="height:20px;"></div> 
                 <div class="user-info-l l">
                     <div class="user-info-l-t">
-                    <c:if test="${loginUser.picUrl == null || loginUser.picUrl == '' }">
+                    <c:if test="${userCustom.picurl == null || userCustom.picurl == '' }">
                     	<img src="images/default.png" />
                     </c:if>
-                    <c:if test="${loginUser.picUrl != null && loginUser.picUrl != '' }">
-                    	<img src="${basePath }/${loginUser.picUrl}" />
+                    <c:if test="${userCustom.picurl != null && userCustom.picurl != '' }">
+                    	<img src="${basePath }/${userCustom.picurl}" />
                     </c:if>
-                        <div class="username">${loginUser.userName }</div>
+                        <div class="username">${userCustom.username }</div>
                     </div>
                     <ul class="user-info-l-b">
                         <li class="cur"><i class="info-icon"></i>我的资料</li>
@@ -58,26 +58,26 @@
                         <li class="cur"><a href="userInfo.html">个人信息</a></li>
                         <li><a href="userPwd.html">修改密码</a></li>
                     </ul>
-                    <form action="${basePath }/user" method="post" enctype="multipart/form-data">
+                    <form action="${basePath }/changeUser.html" method="post" enctype="multipart/form-data">
                     <ul class="bd">
                         <li class="clearfix">
                             <div class="info-l"><i class="red">*</i>用户名：</div>
-                            <div class="info-r"><input type="text" class="txt" value="${loginUser.userName }" readonly="readonly"/></div>
+                            <div class="info-r"><input type="text" class="txt" value="${userCustom.username }" readonly="readonly"/></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l">邮箱地址：</div>
-                            <div class="info-r"><input type="text" name="email" class="txt" value="${loginUser.email }"/></div>
+                            <div class="info-r"><input type="text" name="userCustom.email" class="txt" value="${userCustom.email }"/></div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l">上传头像：</div>
                             <div class="info-r">
-                            	<input type="file" name="picUrl" class="file-btn"/>
+                            	<input type="file" name="pic" class="file-btn"/>
                             </div>
                         </li>
                         <li class="clearfix">
                             <div class="info-l"></div>
                             <div class="info-r">
-                            	<input type="hidden" name="userId" value="${loginUser.userId}"/>
+                            	<input type="hidden" name="userCustom.userid" value="${userCustom.userid}"/>
                             	<input type="submit" class="btn" value="保存" />
                             	<span style="color:red;">${msg }</span>
                             </div>

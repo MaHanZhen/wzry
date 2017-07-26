@@ -9,6 +9,8 @@ import com.ssm.wzry.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -49,5 +51,13 @@ public class UserServiceImpl implements UserService {
         userSelectVo.setUserCustom(userCustom);
         userExtMapper.updateStatusByUserId(userSelectVo);
         return null;
+    }
+
+    public Integer updateUser(UserSelectVo user) throws Exception {
+        return userExtMapper.updateUser(user);
+    }
+
+    public List<UserCustom> queryLoginStatusUser() throws Exception {
+        return userExtMapper.queryUserByLoginStatus();
     }
 }

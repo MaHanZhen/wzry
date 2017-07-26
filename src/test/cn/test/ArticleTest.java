@@ -64,15 +64,25 @@ public class ArticleTest {
         logger.debug("success");
     }
 
-    @Test
+//    @Test
     public void testSelectArticleByZoneId() throws Exception{
 
 
         articleCustom.setZoneid(1);
 
 
-        List<ArticleCustom> articleCustoms = articleExtMapper.selectArticleByZoneId(articleSelectVo);
+//        List<ArticleCustom> articleCustoms = articleExtMapper.selectArticleByZoneId(1);
 
-        logger.debug(articleCustoms);
+//        logger.debug(articleCustoms);
+    }
+
+    @Test
+    public void testLazyLoadArticleAndCommentByZoneId() throws Exception{
+
+        ArticleCustom articleCustom = articleExtMapper.queryArticleDetailByArticleId(7);
+
+        logger.debug(articleCustom);
+
+
     }
 }

@@ -116,13 +116,13 @@
 						<h2 class="l">王者荣耀</h2>
 					</div>
 					<p>
-						<span>今日帖子<strong>${todayArticleCount }</strong></span> <span>全部帖子<strong>${allArticleCount }</strong></span>
+						<span>今日帖子<strong>${select.todayArticleCount }</strong></span> <span>全部帖子<strong>${select.articleCount }</strong></span>
 					</p>
 				</div>
 				<div class="search-box l">
 					<form id="searchForm" action="${basePath }/index.html" method="post">
-						<input type="hidden" name="zoneId" value="${zoneId }"/>
-						<input type="text" class="txt l" name="title" placeholder="请输入帖子标题关键字" value="${title }">
+						<input type="hidden" name="zoneId" value="${select.zoneId }"/>
+						<input type="text" class="txt l" name="title" placeholder="请输入帖子标题关键字" value="${select.title }">
 						<input type="submit" value="搜索" class="btn l" /> 
 					</form>
 				</div> 
@@ -130,8 +130,8 @@
 			<!-- 导航 -->
 			<ul class="hm-bbs-nav border-lrb clearfix">
 				<c:forEach items="${zones }" var="zone">
-					<li <c:if test="${zone.zoneid == zoneId}"> class="current" </c:if> >
-						<a href="${basePath }/index.html?articleCustom.zoneid=${zone.zoneid}"><em></em>${zone.zonename }</a>
+					<li <c:if test="${zone.zoneid == select.zoneId}"> class="current" </c:if> >
+						<a href="${basePath }/index.html?zoneId=${zone.zoneid}"><em></em>${zone.zonename }</a>
 					</li>
 				</c:forEach>
 				
@@ -170,31 +170,31 @@
 						<!-- --------------------------页号显示开始-------------------------- -->
 						<c:set var="showTotal" value="5"/><!-- 预计要显示的页数 -->
 						<!-- 1、如果实际总页数比预计要显示的页数少的话，那么应该将所有页数显示 -->
-						<c:if test="${pageCount < showTotal }">
-							<c:forEach begin="1" end="${pageCount}" step="1" var="pgIndex">
-								<c:if test="${pageNo==pgIndex }">
+						<c:if test="${select.pageCount < showTotal }">
+							<c:forEach begin="1" end="${select.pageCount}" step="1" var="pgIndex">
+								<c:if test="${select.pageNow==pgIndex }">
 									<span class="current">${pgIndex }</span>
 								</c:if>
-								<c:if test="${pageNo!=pgIndex }">
-									<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pgIndex}">${pgIndex }</a>
+								<c:if test="${select.pageNow!=pgIndex }">
+									<a href="${basePath }/index.html?zoneId=${select.zoneId}&page=${pgIndex}">${pgIndex }</a>
 								</c:if>
 							</c:forEach>
 						</c:if>
 						
 						<!-- 2、如果实际总页数比预计要显示的页数大于等于的话，那么... -->
-						<c:if test="${pageCount >= showTotal }">
+						<c:if test="${select.pageCount >= showTotal }">
 							<!-- 左右距离当前页号的间隔页数 -->
 							<c:set var="interval" value="${showTotal%2==1?(showTotal/2 - 0.5):(showTotal/2) }"/>
 							<!-- 起始页号 -->
-							<c:set var="startPageNo" value="${pageNo-interval }"/>
+							<c:set var="startPageNo" value="${select.pageNow-interval }"/>
 							<!-- 结束页号 -->
-							<c:set var="endPageNo" value="${pageNo+interval }"/>
+							<c:set var="endPageNo" value="${select.pageNow+interval }"/>
 							
 							<!-- 2.1、如果起始页号大于0 -->
 							<c:if test="${startPageNo > 0 }">
-								<c:if test="${pageCount < endPageNo }">
-									<c:set var="startPageNo" value="${startPageNo -(endPageNo - pageCount) }"/>
-									<c:set var="endPageNo" value="${pageCount }"/>
+								<c:if test="${select.pageCount < endPageNo }">
+									<c:set var="startPageNo" value="${startPageNo -(endPageNo - select.pageCount) }"/>
+									<c:set var="endPageNo" value="${select.pageCount }"/>
 								</c:if>
 							</c:if>
 							
@@ -205,11 +205,11 @@
 							</c:if>
 							
 							<c:forEach begin="${startPageNo}" end="${endPageNo}" step="1" var="pgIndex">
-								<c:if test="${pageNo==pgIndex }">
+								<c:if test="${select.pageNow==pgIndex }">
 									<span class="current">${pgIndex }</span>
 								</c:if>
-								<c:if test="${pageNo!=pgIndex }">
-									<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pgIndex}">${pgIndex }</a>
+								<c:if test="${select.pageNow!=pgIndex }">
+									<a href="${basePath }/index.html?zoneId=${zoneId}&page=${pgIndex}">${pgIndex }</a>
 								</c:if>
 							</c:forEach>
 						</c:if>
@@ -217,13 +217,11 @@
 						<!-- --------------------------页号显示结束-------------------------- -->
 						
 						<c:if test="${pageNo < pageCount }">
-							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pageNo+1}">下一页</a>
-							<a href="${basePath }/index.html?articleCustom.zoneid=${zoneId}&page=${pageCount}">尾页</a>
+							<a href="${basePath }/index.html?zoneId=${select.zoneId}&page=${select.pageNow+1}">下一页</a>
+							<a href="${basePath }/index.html?zoneId=${select.zoneId}&page=${select.pageCount}">尾页</a>
 						</c:if>
-						<p><span>当前第
-							<c:if test="${pageNo==0 }">1</c:if>
-							<c:if test="${pageNo!=0 }">${pageNo }</c:if>
-							页，共${pageCount }页</span></p>
+						<p><span>当前第${select.pageNow}
+							页，共${select.pageCount }页</span></p>
 					</div>
 				</div>
 					
@@ -232,20 +230,20 @@
 				<div class="aside l">
 					<div class="aside-box">
 						<h3 class="t">
-							<a ahref="javascript:;">在线用户(${onLineUserList.size() })</a>
+							<a ahref="javascript:;">在线用户(${onLineUsers.size() })</a>
 						</h3>
 						<ul class="b clearfix">
-							<c:forEach items="${onLineUserList }" var="user">
+							<c:forEach items="${onLineUsers }" var="user">
 							<li>
 								<div>
-									<c:if test="${user.picUrl == null || user.picUrl=='' }">
+									<c:if test="${user.picurl == null || user.picurl=='' }">
 										<img src="images/default.png" height="55" />
 									</c:if>
-									<c:if test="${user.picUrl != null && user.picUrl!='' }">
-										<img src="${basePath }/${user.picUrl}" height="55" />
+									<c:if test="${user.picurl != null && user.picurl!='' }">
+										<img src="${basePath }/${user.picurl}" height="55" />
 									</c:if>
 								</div>
-								<p>${user.userName }</p>
+								<p>${user.username }</p>
 							</li>
 							</c:forEach>
 							
@@ -283,7 +281,7 @@
 				</div>
 				<div class="win_ft">
 					<div class="win_ft_in">
-						<input type="hidden" name="articleCustom.zoneid" value="${zoneId }"/>
+						<input type="hidden" name="articleCustom.zoneid" value="${select.zoneId }"/>
 						<input type="submit" class="btn" value="发表"/>
 					</div>
 				</div>

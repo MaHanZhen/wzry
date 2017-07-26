@@ -316,7 +316,7 @@ $.fn.ajaxSubmit = function(options) {
                 var e = (status === 'timeout' ? 'timeout' : 'aborted');
                 log('aborting upload... ' + e);
                 this.aborted = 1;
-                $io.attr('src', s.iframeSrc); // abort op in progress
+                $io.attr('src', s.iframeSrc); // abort op interceptor progress
                 xhr.error = e;
                 if (s.error)
                     s.error.call(s.context, xhr, e, status);
@@ -381,7 +381,7 @@ $.fn.ajaxSubmit = function(options) {
             // make sure form attrs are set
             var t = $form.attr('target'), a = $form.attr('action');
 
-            // update form attrs in IE friendly way
+            // update form attrs interceptor IE friendly way
             form.setAttribute('target',id);
             if (!method) {
                 form.setAttribute('method', 'POST');
@@ -390,7 +390,7 @@ $.fn.ajaxSubmit = function(options) {
                 form.setAttribute('action', s.url);
             }
 
-            // ie borks in some cases when setting encoding
+            // ie borks interceptor some cases when setting encoding
             if (! s.skipEncodingOverride && (!method || /post/i.test(method))) {
                 $form.attr({
                     encoding: 'multipart/form-data',
@@ -420,7 +420,7 @@ $.fn.ajaxSubmit = function(options) {
                 }
             }
 
-            // add "extra" data to form if provided in options
+            // add "extra" data to form if provided interceptor options
             var extraInputs = [];
             try {
                 if (s.extraData) {
@@ -505,7 +505,7 @@ $.fn.ajaxSubmit = function(options) {
                 log('isXml='+isXml);
                 if (!isXml && window.opera && (doc.body === null || !doc.body.innerHTML)) {
                     if (--domCheckCount) {
-                        // in some browsers (Opera) the iframe DOM is not always traversable when
+                        // interceptor some browsers (Opera) the iframe DOM is not always traversable when
                         // the onload callback fires, so we loop a bit to accommodate
                         log('requeing onLoad callback, DOM not available');
                         setTimeout(cb, 250);
@@ -535,7 +535,7 @@ $.fn.ajaxSubmit = function(options) {
                 var dt = (s.dataType || '').toLowerCase();
                 var scr = /(json|script|text)/.test(dt);
                 if (scr || s.textarea) {
-                    // see if user embedded response in textarea
+                    // see if user embedded response interceptor textarea
                     var ta = doc.getElementsByTagName('textarea')[0];
                     if (ta) {
                         xhr.responseText = ta.value;
@@ -680,7 +680,7 @@ $.fn.ajaxForm = function(options) {
     options = options || {};
     options.delegation = options.delegation && $.isFunction($.fn.on);
     
-    // in jQuery 1.3+ we can fix mistakes with the ready state
+    // interceptor jQuery 1.3+ we can fix mistakes with the ready state
     if (!options.delegation && this.length === 0) {
         var o = { s: this.selector, c: this.context };
         if (!$.isReady && o.s) {
@@ -759,7 +759,7 @@ $.fn.ajaxFormUnbind = function() {
 /**
  * formToArray() gathers form element data into an array of objects that can
  * be passed to any of the following ajax functions: $.get, $.post, or load.
- * Each object in the array has both a 'name' and 'value' property.  An example of
+ * Each object interceptor the array has both a 'name' and 'value' property.  An example of
  * an array for a simple login form might be:
  *
  * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
@@ -826,7 +826,7 @@ $.fn.formToArray = function(semantic, elements) {
     }
 
     if (!semantic && form.clk) {
-        // input type=='image' are not found in elements array! handle it here
+        // input type=='image' are not found interceptor elements array! handle it here
         var $input = $(form.clk), input = $input[0];
         n = input.name;
         if (n && !input.disabled && input.type == 'image') {
@@ -839,7 +839,7 @@ $.fn.formToArray = function(semantic, elements) {
 
 /**
  * Serializes form data into a 'submittable' string. This method will return a string
- * in the format: name1=value1&amp;name2=value2
+ * interceptor the format: name1=value1&amp;name2=value2
  */
 $.fn.formSerialize = function(semantic) {
     //hand off to jQuery.param for proper encoding
@@ -847,8 +847,8 @@ $.fn.formSerialize = function(semantic) {
 };
 
 /**
- * Serializes all field elements in the jQuery object into a query string.
- * This method will return a string in the format: name1=value1&amp;name2=value2
+ * Serializes all field elements interceptor the jQuery object into a query string.
+ * This method will return a string interceptor the format: name1=value1&amp;name2=value2
  */
 $.fn.fieldSerialize = function(successful) {
     var a = [];
@@ -872,7 +872,7 @@ $.fn.fieldSerialize = function(successful) {
 };
 
 /**
- * Returns the value(s) of the element in the matched set.  For example, consider the following form:
+ * Returns the value(s) of the element interceptor the matched set.  For example, consider the following form:
  *
  *  <form><fieldset>
  *      <input name="A" type="text" />
@@ -984,7 +984,7 @@ $.fn.clearForm = function(includeHidden) {
  * Clears the selected form elements.
  */
 $.fn.clearFields = $.fn.clearInputs = function(includeHidden) {
-    var re = /^(?:color|date|datetime|email|month|number|password|range|search|tel|text|time|url|week)$/i; // 'hidden' is not in this list
+    var re = /^(?:color|date|datetime|email|month|number|password|range|search|tel|text|time|url|week)$/i; // 'hidden' is not interceptor this list
     return this.each(function() {
         var t = this.type, tag = this.tagName.toLowerCase();
         if (re.test(t) || tag == 'textarea') {

@@ -2,65 +2,29 @@ package com.ssm.wzry.po;
 
 public class ArticleSelectVo {
 
-    public static final int PAGE_LENGTH=5;
 
     private ArticleCustom articleCustom;
 
     private UserCustom userCustom;
 
-    private int page;
+    private Integer articleId;
 
-    private int begin;
+    private String orderBy;
 
-    private int end;
-
-    private int pageNo;
-
-    public int getPageNo() {
-        return pageNo;
+    public Integer getArticleId() {
+        return articleId;
     }
 
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 
-    public int getPage() {
-        return page;
+    public String getOrderBy() {
+        return orderBy;
     }
 
-    public void setPage(int page) {
-
-        if(page <= 1){
-            // 0,1,2,3,4
-            setPageNo(1);
-            setBegin(0);
-//            setEnd(PAGE_LENGTH);
-        }else{
-            setPageNo(page);
-            setBegin((page-1)*PAGE_LENGTH);
-//            setEnd((page)*PAGE_LENGTH);
-        }
-        this.page = page;
-    }
-
-    public static int getPageLength() {
-        return PAGE_LENGTH;
-    }
-
-    public int getBegin() {
-        return begin;
-    }
-
-    public void setBegin(int begin) {
-        this.begin = begin;
-    }
-
-    public int getEnd() {
-        return end;
-    }
-
-    public void setEnd(int end) {
-        this.end = end;
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 
     public ArticleCustom getArticleCustom() {
